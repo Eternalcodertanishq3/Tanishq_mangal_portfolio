@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- SEO and Social Sharing Metadata -->
+    <title>Tanishq Mangal | 3D Interactive Portfolio</title>
+    <meta name="description"
+        content="Explore the interactive 3D portfolio of Tanishq Mangal, a creative technologist specializing in WebGL, Three.js, and immersive web experiences.">
+    <meta name="author" content="Tanishq Mangal">
+    <meta name="keywords"
+        content="Tanishq Mangal, Portfolio, Black Hole, Relativistic Jet, Interstellar, WebGL, Three.js, GSAP, Interactive, Scrollytelling, Creative Developer, GLSL, Shaders, Computer Science">
+
+    <!-- Open Graph / Facebook / LinkedIn -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://tanishq-creates.netlify.app/">
+    <meta property="og:title" content="Tanishq Mangal | 3D Interactive Portfolio">
+    <meta property="og:description" content="A cinematic, scroll-driven portfolio featuring a real-time 3D black hole.">
+    <meta property="og:image"
+        content="https://images.unsplash.com/photo-1614728263952-84ea256ec346?q=80&w=1200&auto=format&fit=crop">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://tanishq-creates.netlify.app/">
+    <meta property="twitter:title" content="Tanishq Mangal | 3D Interactive Portfolio">
+    <meta property="twitter:description"
+        content="A cinematic, scroll-driven portfolio featuring a real-time 3D black hole.">
+    <meta property="twitter:image"
+        content="https://images.unsplash.com/photo-1614728263952-84ea256ec346?q=80&w=1200&auto=format&fit=crop">
+
+    <!-- Favicon -->
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 rx=%2220%22 fill=%22%23000005%22></rect><text x=%2250%%22 y=%2250%%22 dominant-baseline=%22central%22 text-anchor=%22middle%22 font-size=%2250%22 font-family=%22Space Grotesk, sans-serif%22 fill=%22%23ff9a24%22>TM</text></svg>">
+
+    <!-- STYLESHEETS AND FONTS -->
+    <link rel="stylesheet" href="css/style.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Use Bunny Fonts for Global Accessibility -->
+    <link href="https://fonts.bunny.net/css?family=inter:300,400,500,600,700|space-grotesk:400,500,700"
+        rel="stylesheet" />
+
+    <!-- JAVASCRIPT LIBRARIES -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/EffectComposer.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/RenderPass.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/ShaderPass.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/shaders/LuminosityHighPassShader.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/shaders/CopyShader.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/UnrealBloomPass.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/ScrollTrigger.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/ScrollToPlugin.min.js"></script>
+
+</head>
+
+<body>
+    <div id="preloader">
+        <div class="loader-text">ESTABLISHING CONNECTION...</div>
+    </div>
+
+    <div id="webgl-canvas-container"></div>
+
+    <header id="header">
+        <nav class="max-w-7xl mx-auto flex justify-between items-center">
+            <a href="#hero-section" class="text-2xl font-bold logo">TM</a>
+            <div class="desktop-nav">
+                <a href="#about-section" data-section="about-section">About</a>
+                <a href="#skills-section" data-section="skills-section">Skills</a>
+                <a href="#projects-section" data-section="projects-section">Projects</a>
+                <a href="#experience-section" data-section="experience-section">Experience</a>
+                <a href="#education-section" data-section="education-section">Education</a>
+                <a href="#certifications-section" data-section="certifications-section">Certifications</a>
+                <a href="#contact-section" data-section="contact-section">Contact</a>
+            </div>
+            <button id="hamburger-btn" class="hamburger-btn" type="button" aria-label="Toggle mobile navigation menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </nav>
+    </header>
+
+    <div id="mobile-nav-menu" class="mobile-nav-menu">
+        <a href="#about-section" class="mobile-nav-link">About</a>
+        <a href="#skills-section" class="mobile-nav-link">Skills</a>
+        <a href="#projects-section" class="mobile-nav-link">Projects</a>
+        <a href="#experience-section" class="mobile-nav-link">Experience</a>
+        <a href="#education-section" class="mobile-nav-link">Education</a>
+        <a href="#certifications-section" class="mobile-nav-link">Certifications</a>
+        <a href="#contact-section" class="mobile-nav-link">Contact</a>
+    </div>
+
+    <main id="scroll-content">
+        <section id="hero-section" class="scroll-section">
+            <div class="relative">
+                <h1 class="text-6xl md:text-8xl font-extrabold tracking-tighter">TANISHQ MANGAL</h1>
+                <p class="text-xl md:text-2xl text-orange-400 mt-2">Creative Technologist & Developer</p>
+                <p class="text-lg text-gray-400 mt-12 animate-pulse">Scroll to begin the journey</p>
+            </div>
+        </section>
+
+        <section id="about-section" class="scroll-section">
+            <div class="content-box">
+                <h2 class="text-4xl font-bold mb-4">About Me</h2>
+                <p class="text-gray-300 leading-relaxed text-lg mb-8" id="about-text"></p>
+                <a href="Tanishq Mangal - Resume.pdf" target="_blank" id="resume-btn">Download Resume</a>
+            </div>
+        </section>
+
+        <section id="skills-section" class="scroll-section">
+            <div class="content-box text-right">
+                <h2 class="text-4xl font-bold mb-6">Core Competencies</h2>
+                <div id="skills-container" class="flex flex-wrap justify-end gap-3 text-lg"></div>
+            </div>
+        </section>
+
+        <section id="projects-section" class="scroll-section">
+            <div class="w-full max-w-6xl mx-auto">
+                <h2 class="text-5xl font-bold mb-12 text-center">Featured Projects</h2>
+                <div id="projects-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"></div>
+            </div>
+        </section>
+
+        <section id="experience-section" class="scroll-section">
+            <div class="content-box">
+                <h2 class="text-4xl font-bold mb-8">Professional Experience</h2>
+                <div id="experience-container" class="space-y-8"></div>
+            </div>
+        </section>
+
+        <section id="education-section" class="scroll-section">
+            <div class="content-box">
+                <h2 class="text-4xl font-bold mb-8">Education</h2>
+                <div class="border-l-2 border-orange-400 pl-6">
+                    <h3 class="text-2xl font-bold text-orange-400 mb-2" id="education-degree"></h3>
+                    <p class="text-gray-400 text-lg" id="education-school"></p>
+                    <p class="text-gray-500 text-sm mt-2" id="education-expected"></p>
+                </div>
+            </div>
+        </section>
+
+        <section id="certifications-section" class="scroll-section">
+            <div class="content-box">
+                <h2 class="text-4xl font-bold mb-8">Certifications</h2>
+                <div id="certifications-container"></div>
+            </div>
+        </section>
+
+        <section id="contact-section" class="scroll-section">
+            <div class="content-box text-center">
+                <h2 class="text-5xl font-bold mb-4">Let's Create Together</h2>
+                <p class="text-lg text-gray-300 mb-8">Open to new opportunities and collaborations. Let's build
+                    something amazing.</p>
+                <button id="get-in-touch-btn"
+                    class="inline-block bg-orange-600 hover:bg-orange-500 text-white font-semibold px-8 py-4 rounded-full text-lg transition-colors duration-300 shadow-lg shadow-orange-500/50">
+                    Get In Touch
+                </button>
+                <div id="socials-container" class="flex justify-center gap-8 mt-12"></div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Project Details Modal -->
+    <div id="project-modal" class="modal-backdrop">
+        <div class="modal-content">
+            <button id="close-project-modal-btn" class="modal-close-btn">&times;</button>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div id="modal-images-container" class="flex flex-col gap-4">
+                    <img id="modal-project-image" src="https://placehold.co/600x400/000005/ff9a24?text=Project+Image"
+                        alt="Project Image" class="rounded-lg w-full h-auto object-cover">
+                    <img id="modal-project-image-2" src="" alt="Project Image 2" class="rounded-lg w-full h-auto object-cover hidden">
+                </div>
+                <div>
+                    <h2 id="modal-project-title" class="text-4xl font-bold mb-2"></h2>
+                    <p id="modal-project-description" class="text-lg text-gray-300 mb-6"></p>
+                    <h3 class="text-2xl font-bold mb-3">Technologies Used:</h3>
+                    <div id="modal-project-tech" class="flex flex-wrap gap-3 mb-8"></div>
+                    <div id="modal-project-links" class="flex flex-wrap gap-4"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Experience Details Modal -->
+    <div id="experience-modal" class="modal-backdrop">
+        <div class="modal-content">
+            <button id="close-experience-modal-btn" class="modal-close-btn">&times;</button>
+            <div>
+                <h2 id="modal-experience-position" class="text-4xl font-bold mb-2"></h2>
+                <p id="modal-experience-company" class="text-2xl text-orange-400 mb-2"></p>
+                <p id="modal-experience-duration" class="text-gray-400 mb-6"></p>
+                <h3 class="text-2xl font-bold mb-4">Key Achievements:</h3>
+                <ul id="modal-experience-achievements" class="list-disc list-inside space-y-3 text-gray-300"></ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Certifications Details Modal -->
+    <div id="certifications-modal" class="modal-backdrop">
+        <div class="modal-content">
+            <button id="close-certifications-modal-btn" class="modal-close-btn">&times;</button>
+            <div>
+                <h2 id="modal-cert-name" class="text-4xl font-bold mb-2"></h2>
+                <p id="modal-cert-issuer" class="text-2xl text-orange-400"></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Contact Form Modal -->
+    <div id="contact-modal" class="modal-backdrop">
+        <div class="modal-content">
+            <button id="close-contact-modal-btn" class="modal-close-btn">&times;</button>
+
+            <!-- Form View -->
+            <div id="form-container">
+                <h2 class="text-4xl font-bold mb-6 text-center">Contact Me</h2>
+                <form id="contact-form" name="contact" data-netlify="true">
+                    <div class="mb-4">
+                        <label for="name" class="block text-gray-400 mb-2">Name</label>
+                        <input type="text" id="name" name="name" required class="contact-input">
+                    </div>
+                    <div class="mb-4">
+                        <label for="email" class="block text-gray-400 mb-2">Email</label>
+                        <input type="email" id="email" name="email" required class="contact-input">
+                    </div>
+                    <div class="mb-6">
+                        <label for="message" class="block text-gray-400 mb-2">Message</label>
+                        <textarea id="message" name="message" rows="4" required class="contact-input"></textarea>
+                    </div>
+                    <button type="submit" id="contact-submit-btn"
+                        class="w-full bg-orange-600 hover:bg-orange-500 text-white font-semibold px-8 py-3 rounded-lg text-lg transition-all duration-300 shadow-lg shadow-orange-500/50">
+                        Send Message
+                    </button>
+                </form>
+            </div>
+
+            <!-- Success Message View -->
+            <div id="success-message-container" class="hidden flex-col justify-center items-center text-center py-12">
+                <svg class="w-16 h-16 text-green-500 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+                <h2 class="text-4xl font-bold mb-4 text-center">Thank You!</h2>
+                <p class="text-lg text-gray-300">Your message has been sent. I'll get back to you shortly.</p>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- ====== EMBEDDED SHADERS ====== -->
+    <script id="diskVertexShader" type="x-shader/x-vertex">
+        varying vec2 vUv; 
+        varying vec3 vPos;
+        void main() { 
+            vUv = uv; 
+            vPos = position; // Use local position for shader logic regardless of geometry UVs
+            gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0); 
+        }
+    </script>
+    <script id="diskFragmentShader" type="x-shader/x-fragment">
+        varying vec2 vUv; 
+        varying vec3 vPos; 
+        uniform float u_time;
+        
+        // Simplex noise
+        vec3 mod289(vec3 x) { return x - floor(x * (1.0 / 289.0)) * 289.0; }
+        vec2 mod289(vec2 x) { return x - floor(x * (1.0 / 289.0)) * 289.0; }
+        vec3 permute(vec3 x) { return mod289(((x*34.0)+1.0)*x); }
+        float snoise(vec2 v) {
+            const vec4 C = vec4(0.211324865405187, 0.366025403784439, -0.577350269189626, 0.024390243902439);
+            vec2 i  = floor(v + dot(v, C.yy) );
+            vec2 x0 = v -   i + dot(i, C.xx);
+            vec2 i1;
+            i1 = (x0.x > x0.y) ? vec2(1.0, 0.0) : vec2(0.0, 1.0);
+            vec4 x12 = x0.xyxy + C.xxzz;
+            x12.xy -= i1;
+            i = mod289(i);
+            vec3 p = permute( permute( i.y + vec3(0.0, i1.y, 1.0 )) + i.x + vec3(0.0, i1.x, 1.0 ));
+            vec3 m = max(0.5 - vec3(dot(x0,x0), dot(x12.xy,x12.xy), dot(x12.zw,x12.zw)), 0.0);
+            m = m*m ;
+            m = m*m ;
+            vec3 x = 2.0 * fract(p * C.www) - 1.0;
+            vec3 h = abs(x) - 0.5;
+            vec3 ox = floor(x + 0.5);
+            vec3 a0 = x - ox;
+            m *= 1.79284291400159 - 0.85373472095314 * ( a0*a0 + h*h );
+            vec3 g;
+            g.x  = a0.x  * x0.x  + h.x  * x0.y;
+            g.yz = a0.yz * x12.xz + h.yz * x12.yw;
+            return 130.0 * dot(m, g);
+        }
+
+        void main() {
+            float rRaw = length(vPos.xy);
+            float r = (rRaw - 2.0) / 4.0; // 0 to 1 roughly
+            
+            float angle = atan(vPos.y, vPos.x);
+            float time = u_time * 0.5; 
+            
+            // --- NOISE ---
+            // Swirling clouds
+            float swirl = r * 4.0 - time;
+            vec2 noiseUv = vec2(vPos.x * 0.4 + cos(swirl)*0.5, vPos.y * 0.4 + sin(swirl)*0.5);
+            float cloudNoise = snoise(noiseUv * 1.5); // Base clouds
+            
+            float detailNoise = snoise(vec2(angle * 4.0, rRaw * 1.5 - time * 2.0)); // Flow details
+            
+            float combinedNoise = mix(cloudNoise, detailNoise, 0.4);
+            
+            // --- COLOR PALETTE ---
+            // "Light orange, red, only a little bit yellow"
+            // "Bluish glow near the pulsar light"
+            
+            vec3 deepRed = vec3(0.4, 0.02, 0.05); // Dark outer red
+            vec3 red = vec3(0.9, 0.1, 0.05); // Rich Red
+            vec3 lightOrange = vec3(1.0, 0.55, 0.25); // "Light Orange" (Peach/Salmon hint)
+            vec3 electricBlue = vec3(0.2, 0.6, 1.0); // Pulsar glow color
+            
+            // Base Gradient: Light Orange inner -> Red -> Deep Red outer
+            vec3 color = mix(lightOrange, deepRed, smoothstep(0.1, 0.9, r));
+            
+            // Mid-Layer: Red & Light Orange clouds
+            // We replaced "Magma/Fiery" with specific "Light Orange & Red"
+            
+            float midIntensity = smoothstep(0.2, 0.4, r) * (1.0 - smoothstep(0.7, 0.95, r));
+            
+            // Clouds
+            // Mix Red and Light Orange
+            vec3 cloudColor = mix(red, lightOrange, combinedNoise * 0.5 + 0.3);
+            
+            // Apply clouds
+            color += cloudColor * midIntensity * (0.4 + 0.6 * combinedNoise);
+            
+            // --- BLUE GLOW (Interaction with Pulsar) ---
+            // "Bluish glow near the pulsar light" -> Inner Rim
+            float innerGlow = smoothstep(0.25, 0.05, r); // Distinct blue rim
+            color = mix(color, electricBlue, innerGlow * 0.8); // Blend into blue
+            
+            // --- ALPHA / EDGES ---
+            // Z Volume
+            float zDist = abs(vPos.z);
+            float tubeFade = 1.0 - smoothstep(0.8, 2.2, zDist); 
+            
+            // Radial Edges (Dense Disk)
+            float outerLimit = 0.85 + combinedNoise * 0.12; 
+            float outerFade = 1.0 - smoothstep(outerLimit - 0.2, outerLimit + 0.1, r);
+            float innerFade = smoothstep(0.1, 0.2, r); // Hole
+            
+            float denseAlpha = tubeFade * outerFade * innerFade;
+            // Density modulation
+            denseAlpha = max(denseAlpha, midIntensity * tubeFade * 0.95); 
+            denseAlpha *= 0.7 + 0.3 * combinedNoise;
+
+            // --- OUTER GLOW (HALO) ---
+            // "Glow near the disk also like actual quasar contains"
+            // Faint halo extending to the geometry limit (r=1.0)
+            float haloFade = 1.0 - smoothstep(0.8, 1.0, r);
+            float haloAlpha = haloFade * innerFade * tubeFade * 0.3; // Low opacity
+            
+            // Combine
+            float alpha = denseAlpha + haloAlpha;
+            alpha = clamp(alpha, 0.0, 1.0);
+            
+            // Add glow color to halo region
+            // If we are in the halo (low denseAlpha), boost brightness/redness
+            if (denseAlpha < 0.1) {
+                color = mix(color, red, 0.5); // Reddish halo
+            }
+            
+            if (alpha < 0.001) discard; // Allow faint glow
+            
+            gl_FragColor = vec4(color * 2.5, alpha);
+        }
+    </script>
+    <script id="jetVertexShader" type="x-shader/x-vertex">
+        varying vec2 vUv; 
+        uniform float u_time;
+        // Need noise function in vertex shader for organic movement
+        vec3 mod289(vec3 x) { return x - floor(x * (1.0 / 289.0)) * 289.0; }
+        vec4 mod289(vec4 x) { return x - floor(x * (1.0 / 289.0)) * 289.0; }
+        vec4 permute(vec4 x) { return mod289(((x*34.0)+1.0)*x); }
+        vec4 taylorInvSqrt(vec4 r) { return 1.79284291400159 - 0.85373472095314 * r; }
+        float snoise(vec3 v) {
+            const vec2 C = vec2(1.0/6.0, 1.0/3.0);
+            const vec4 D = vec4(0.0, 0.5, 1.0, 2.0);
+            vec3 i  = floor(v + dot(v, C.yyy) );
+            vec3 x0 = v - i + dot(i, C.xxx) ;
+            vec3 g = step(x0.yzx, x0.xyz);
+            vec3 l = 1.0 - g;
+            vec3 i1 = min( g.xyz, l.zxy );
+            vec3 i2 = max( g.xyz, l.zxy );
+            vec3 x1 = x0 - i1 + C.xxx;
+            vec3 x2 = x0 - i2 + C.yyy;
+            vec3 x3 = x0 - D.yyy;
+            i = mod289(i);
+            vec4 p = permute( permute( permute( 
+                        i.z + vec4(0.0, i1.z, i2.z, 1.0 ))
+                    + i.y + vec4(0.0, i1.y, i2.y, 1.0 )) 
+                    + i.x + vec4(0.0, i1.x, i2.x, 1.0 ));
+            float n_ = 0.142857142857;
+            vec3  ns = n_ * D.wyz - D.xzx;
+            vec4 j = p - 49.0 * floor(p * ns.z * ns.z);
+            vec4 x_ = floor(j * ns.z);
+            vec4 y_ = floor(j - 7.0 * x_);
+            vec4 x = x_ * ns.x + ns.yyyy;
+            vec4 y = y_ * ns.x + ns.yyyy;
+            vec4 h = 1.0 - abs(x) - abs(y);
+            vec4 b0 = vec4( x.xy, y.xy );
+            vec4 b1 = vec4( x.zw, y.zw );
+            vec4 s0 = floor(b0)*2.0 + 1.0;
+            vec4 s1 = floor(b1)*2.0 + 1.0;
+            vec4 sh = -step(h, vec4(0.0));
+            vec4 a0 = b0.xzyw + s0.xzyw * sh.xxyy ;
+            vec4 a1 = b1.xzyw + s1.xzyw * sh.zzww ;
+            vec3 p0 = vec3(a0.xy,h.x);
+            vec3 p1 = vec3(a0.zw,h.y);
+            vec3 p2 = vec3(a1.xy,h.z);
+            vec3 p3 = vec3(a1.zw,h.w);
+            vec4 norm = taylorInvSqrt(vec4(dot(p0,p0), dot(p1,p1), dot(p2, p2), dot(p3,p3)));
+            p0 *= norm.x;
+            p1 *= norm.y;
+            p2 *= norm.z;
+            p3 *= norm.w;
+            vec4 m = max(0.6 - vec4(dot(x0,x0), dot(x1,x1), dot(x2,x2), dot(x3,x3)), 0.0);
+            m = m * m;
+            return 42.0 * dot( m*m, vec4( dot(p0,x0), dot(p1,x1), 
+                                        dot(p2,x2), dot(p3,x3) ) );
+        }
+        
+        void main() { 
+            vUv = uv; 
+            
+            vec3 pos = position;
+            
+            // Add distortion to X and Z based on Y (height) + time
+            // Y goes from 0 to height (or centered).
+            
+            float displacementStr = 0.3 * uv.y; // Increases along length
+            float noiseVal = snoise(vec3(pos.y * 0.5, pos.x * 0.5, u_time * 2.0));
+            
+            pos.x += noiseVal * displacementStr;
+            pos.z += snoise(vec3(pos.y * 0.5 + 10.0, pos.z * 0.5, u_time * 2.0)) * displacementStr;
+            
+            gl_Position = projectionMatrix * modelViewMatrix * vec4(pos, 1.0); 
+        }
+    </script>
+    <script id="jetFragmentShader" type="x-shader/x-fragment">
+        varying vec2 vUv; uniform float u_time;
+        // Reuse mod289, permute from disk shader or re-define
+        vec3 mod289(vec3 x) { return x - floor(x * (1.0 / 289.0)) * 289.0; }
+        vec2 mod289(vec2 x) { return x - floor(x * (1.0 / 289.0)) * 289.0; }
+        vec3 permute(vec3 x) { return mod289(((x*34.0)+1.0)*x); }
+        float snoise(vec2 v) {
+            const vec4 C = vec4(0.211324865405187, 0.366025403784439, -0.577350269189626, 0.024390243902439);
+            vec2 i  = floor(v + dot(v, C.yy) );
+            vec2 x0 = v -   i + dot(i, C.xx);
+            vec2 i1;
+            i1 = (x0.x > x0.y) ? vec2(1.0, 0.0) : vec2(0.0, 1.0);
+            vec4 x12 = x0.xyxy + C.xxzz;
+            x12.xy -= i1;
+            i = mod289(i);
+            vec3 p = permute( permute( i.y + vec3(0.0, i1.y, 1.0 )) + i.x + vec3(0.0, i1.x, 1.0 ));
+            vec3 m = max(0.5 - vec3(dot(x0,x0), dot(x12.xy,x12.xy), dot(x12.zw,x12.zw)), 0.0);
+            m = m*m ;
+            m = m*m ;
+            vec3 x = 2.0 * fract(p * C.www) - 1.0;
+            vec3 h = abs(x) - 0.5;
+            vec3 ox = floor(x + 0.5);
+            vec3 a0 = x - ox;
+            m *= 1.79284291400159 - 0.85373472095314 * ( a0*a0 + h*h );
+            vec3 g;
+            g.x  = a0.x  * x0.x  + h.x  * x0.y;
+            g.yz = a0.yz * x12.xz + h.yz * x12.yw;
+            return 130.0 * dot(m, g);
+        }
+
+        void main() {
+            // Faster spin by multiplying time
+            float speed = 10.0; 
+            float noise = snoise(vec2(vUv.x * 3.0, vUv.y * 15.0 - u_time * speed));
+            
+            // Emitter Glow (Base of jet)
+            // vUv.y is usually 0 at base 1 at top? Need to verify. Assuming 0 at base for now.
+            // High intensity glow at base
+            float emitterGlow = 1.0 - smoothstep(0.0, 0.2, vUv.y);
+            emitterGlow = pow(emitterGlow, 2.0) * 2.0;
+            
+            // Core intensity
+            float coreIntensity = 1.0 - abs(vUv.x - 0.5) * 2.0; 
+            
+            // Vapor noise slightly moved
+            float vaporNoise = snoise(vec2(vUv.x * 12.0, vUv.y * 6.0 - u_time * 3.0));
+            float vaporEdge = smoothstep(0.0, 0.5 + vaporNoise * 0.3, coreIntensity);
+            
+            noise = pow(abs(noise), 1.2); 
+            
+            vec3 blueCore = vec3(0.2, 0.6, 1.0);
+            vec3 whiteHot = vec3(0.95, 0.98, 1.0);
+            
+            vec3 color = mix(blueCore, whiteHot, noise + emitterGlow * 0.5);
+            
+            // Adjust lengthFade to account for new geometry (vUv.y might be inverted or different range)
+            // Assuming vUv.y still goes from 0 to 1 along the length of the cylinder.
+            // The narrow end (radiusBottom = 0.2) is at y=0, wide end (radiusTop = 3) is at y=1.
+            // So, emitter glow should be at vUv.y = 0.
+            float lengthFade = smoothstep(0.0, 0.1, vUv.y) * (1.0 - smoothstep(0.8, 1.0, vUv.y));
+            
+            // Emitter region should be solid and bright at the narrow end (vUv.y = 0)
+            // Enhance emitter glow at the narrow end
+            float narrowEndGlow = 1.0 - smoothstep(0.0, 0.1, vUv.y); // Strong glow at vUv.y=0
+            narrowEndGlow = pow(narrowEndGlow, 3.0) * 3.0; // Make it very intense and localized
+            
+            lengthFade = max(lengthFade, emitterGlow);
+            lengthFade = max(lengthFade, narrowEndGlow); // Combine with enhanced narrow end glow
+            
+            float alpha = vaporEdge * lengthFade * (0.6 + 0.4 * noise); 
+            alpha = clamp(alpha + emitterGlow * 0.5 + narrowEndGlow * 0.8, 0.0, 1.0); // Add narrow end glow to final alpha
+            
+            gl_FragColor = vec4(color * 1.5, alpha); 
+        }
+    </script>
+
+    <!-- Main JavaScript file -->
+    <script src="js/main.js"></script>
+</body>
+
+</html>
