@@ -212,7 +212,25 @@ export default function PortfolioPage() {
   const handleContactSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
+      // 1. Submit to Firestore (existing logic)
       await submitContact(contactForm);
+      
+      // 2. Submit to Netlify (new logic for free email notifications)
+      const encode = (data: Record<string, string>) => {
+        return Object.keys(data)
+          .map(key => encodeURIComponent(key) + "=" + encodeURIComponent(data[key]))
+          .join("&");
+      };
+
+      await fetch("/", {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: encode({ 
+          "form-name": "contact", 
+          ...contactForm 
+        })
+      });
+
       setContactSuccess(true);
     } catch (error) {
       console.error('Error submitting contact', error);
@@ -417,18 +435,26 @@ export default function PortfolioPage() {
             {!contactSuccess ? (
               <div>
                 <h2 className="text-4xl font-bold mb-6 text-center font-heading">Contact Me</h2>
-                <form onSubmit={handleContactSubmit}>
+                {/* Hidden form for Netlify crawler to detect the form name and fields */}
+                <form name="contact" data-netlify="true" hidden>
+                  <input type="text" name="name" />
+                  <input type="email" name="email" />
+                  <textarea name="message"></textarea>
+                </form>
+                
+                <form onSubmit={handleContactSubmit} data-netlify="true" name="contact">
+                  <input type="hidden" name="form-name" value="contact" />
                   <div className="mb-4">
                     <label htmlFor="name" className="block text-gray-400 mb-2">Name</label>
-                    <input id="name" title="Name" placeholder="Your Name" type="text" required className="contact-input" value={contactForm.name} onChange={(e) => setContactForm({ ...contactForm, name: e.target.value })} />
+                    <input id="name" name="name" title="Name" placeholder="Your Name" type="text" required className="contact-input" value={contactForm.name} onChange={(e) => setContactForm({ ...contactForm, name: e.target.value })} />
                   </div>
                   <div className="mb-4">
                     <label htmlFor="email" className="block text-gray-400 mb-2">Email</label>
-                    <input id="email" title="Email" placeholder="Your Email" type="email" required className="contact-input" value={contactForm.email} onChange={(e) => setContactForm({ ...contactForm, email: e.target.value })} />
+                    <input id="email" name="email" title="Email" placeholder="Your Email" type="email" required className="contact-input" value={contactForm.email} onChange={(e) => setContactForm({ ...contactForm, email: e.target.value })} />
                   </div>
                   <div className="mb-6">
                     <label htmlFor="message" className="block text-gray-400 mb-2">Message</label>
-                    <textarea id="message" title="Message" placeholder="Your Message" rows={4} required className="contact-input" value={contactForm.message} onChange={(e) => setContactForm({ ...contactForm, message: e.target.value })} />
+                    <textarea id="message" name="message" title="Message" placeholder="Your Message" rows={4} required className="contact-input" value={contactForm.message} onChange={(e) => setContactForm({ ...contactForm, message: e.target.value })} />
                   </div>
                   <button type="submit" className="w-full bg-orange-600 hover:bg-orange-500 text-white font-semibold px-8 py-3 rounded-lg text-lg transition-all shadow-lg shadow-orange-500/50">Send Message</button>
                 </form>
