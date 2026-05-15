@@ -43,6 +43,59 @@ export default function CertificationsPage() {
     }
   };
 
+  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    // Show loading state
+    setUploading(true);
+    const loadingToast = toast.loading('Processing image...');
+
+    try {
+      // 1. Convert to Base64 and compress using a Canvas
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = (event) => {
+        const img = new Image();
+        img.src = event.target?.result as string;
+        img.onload = () => {
+          const canvas = document.createElement('canvas');
+          const MAX_WIDTH = 1200;
+          const MAX_HEIGHT = 1200;
+          let width = img.width;
+          let height = img.height;
+
+          if (width > height) {
+            if (width > MAX_WIDTH) {
+              height *= MAX_WIDTH / width;
+              width = MAX_WIDTH;
+            }
+          } else {
+            if (height > MAX_HEIGHT) {
+              width *= MAX_HEIGHT / height;
+              height = MAX_HEIGHT;
+            }
+          }
+
+          canvas.width = width;
+          canvas.height = height;
+          const ctx = canvas.getContext('2d');
+          ctx?.drawImage(img, 0, 0, width, height);
+
+          // Quality 0.6 keeps it well under 1MB for Firestore
+          const dataUrl = canvas.toDataURL('image/jpeg', 0.6);
+          setCurrentCert({ ...currentCert, credentialUrl: dataUrl });
+          
+          setUploading(false);
+          toast.success('Image ready!', { id: loadingToast });
+        };
+      };
+    } catch (err) {
+      toast.error('Failed to process image');
+      setUploading(false);
+    }
+  };
+
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
     const loadingToast = toast.loading('Saving certification...');
@@ -58,7 +111,7 @@ export default function CertificationsPage() {
       }
       setIsModalOpen(false);
     } catch (err) {
-      toast.error('Failed to save certification', { id: loadingToast });
+      toast.error('Failed to save certification. Note: File might be too large (>1MB).', { id: loadingToast });
     }
   };
 
@@ -129,6 +182,7 @@ export default function CertificationsPage() {
                   />
                 </div>
                 <div>
+                <div>
                   <label htmlFor="cert-issuer" className="block text-sm font-medium text-gray-400 mb-1">Issuer</label>
                   <input 
                     id="cert-issuer"
@@ -142,8 +196,25 @@ export default function CertificationsPage() {
                   />
                 </div>
                 <div>
-                  <label htmlFor="cert-link" className="block text-sm font-medium text-gray-400 mb-1">Certificate Link (URL)</label>
-                  <p className="text-[10px] text-gray-500 mb-2">Upload your certificate to Google Drive, LinkedIn, or Imgur and paste the link here.</p>
+                  <label className="block text-sm font-medium text-gray-400 mb-1">Upload Certificate (Direct to DB)</label>
+                  <div className="flex items-center gap-4">
+                    <input 
+                      type="file" 
+                      onChange={handleFileUpload}
+                      className="hidden" 
+                      id="cert-file"
+                      accept="image/*"
+                    />
+                    <label htmlFor="cert-file" className="bg-orange-500/20 hover:bg-orange-500/30 text-orange-400 px-4 py-2 rounded-lg cursor-pointer text-sm border border-orange-400/30 transition-all">
+                      {uploading ? 'Processing...' : '📁 Choose Certificate Image'}
+                    </label>
+                    {currentCert.credentialUrl?.startsWith('data:') && (
+                      <span className="text-green-400 text-xs font-bold animate-pulse">✓ Ready to Save</span>
+                    )}
+                  </div>
+                </div>
+                <div>
+                  <label htmlFor="cert-link" className="block text-sm font-medium text-gray-400 mb-1">Or Certificate Link (URL)</label>
                   <input 
                     id="cert-link"
                     type="text" 
