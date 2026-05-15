@@ -34,47 +34,63 @@ export default function CertificationsPage() {
     if (!file) return;
 
     setUploading(true);
-    const loadingToast = toast.loading('Processing image...');
+    const loadingToast = toast.loading('Processing file...');
 
     try {
       const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onload = (event) => {
-        const img = new Image();
-        img.src = event.target?.result as string;
-        img.onload = () => {
-          const canvas = document.createElement('canvas');
-          const MAX_WIDTH = 1200;
-          const MAX_HEIGHT = 1200;
-          let width = img.width;
-          let height = img.height;
-
-          if (width > height) {
-            if (width > MAX_WIDTH) {
-              height *= MAX_WIDTH / width;
-              width = MAX_WIDTH;
-            }
-          } else {
-            if (height > MAX_HEIGHT) {
-              width *= MAX_HEIGHT / height;
-              height = MAX_HEIGHT;
-            }
-          }
-
-          canvas.width = width;
-          canvas.height = height;
-          const ctx = canvas.getContext('2d');
-          ctx?.drawImage(img, 0, 0, width, height);
-
-          const dataUrl = canvas.toDataURL('image/jpeg', 0.6);
-          setCurrentCert({ ...currentCert, credentialUrl: dataUrl });
-          
+      
+      if (file.type === 'application/pdf') {
+        // PDF Handling: Direct Base64 (No compression possible in browser easily)
+        if (file.size > 1024 * 1024) {
+          toast.error('PDF too large! Must be under 1MB.', { id: loadingToast });
           setUploading(false);
-          toast.success('Image ready!', { id: loadingToast });
+          return;
+        }
+        reader.readAsDataURL(file);
+        reader.onload = (event) => {
+          setCurrentCert({ ...currentCert, credentialUrl: event.target?.result as string });
+          setUploading(false);
+          toast.success('PDF ready!', { id: loadingToast });
         };
-      };
+      } else {
+        // Image Handling: With Compression
+        reader.readAsDataURL(file);
+        reader.onload = (event) => {
+          const img = new Image();
+          img.src = event.target?.result as string;
+          img.onload = () => {
+            const canvas = document.createElement('canvas');
+            const MAX_WIDTH = 1200;
+            const MAX_HEIGHT = 1200;
+            let width = img.width;
+            let height = img.height;
+
+            if (width > height) {
+              if (width > MAX_WIDTH) {
+                height *= MAX_WIDTH / width;
+                width = MAX_WIDTH;
+              }
+            } else {
+              if (height > MAX_HEIGHT) {
+                width *= MAX_HEIGHT / height;
+                height = MAX_HEIGHT;
+              }
+            }
+
+            canvas.width = width;
+            canvas.height = height;
+            const ctx = canvas.getContext('2d');
+            ctx?.drawImage(img, 0, 0, width, height);
+
+            const dataUrl = canvas.toDataURL('image/jpeg', 0.6);
+            setCurrentCert({ ...currentCert, credentialUrl: dataUrl });
+            setUploading(false);
+            toast.success('Image ready!', { id: loadingToast });
+          };
+        };
+      }
     } catch (err) {
-      toast.error('Failed to process image');
+      toast.error('Failed to process file');
       setUploading(false);
     }
   };
@@ -184,7 +200,7 @@ export default function CertificationsPage() {
                       onChange={handleFileUpload}
                       className="hidden" 
                       id="cert-file"
-                      accept="image/*"
+                      accept="image/*,.pdf"
                     />
                     <label htmlFor="cert-file" className="bg-orange-500/20 hover:bg-orange-500/30 text-orange-400 px-4 py-2 rounded-lg cursor-pointer text-sm border border-orange-400/30 transition-all">
                       {uploading ? 'Processing...' : '📁 Choose Certificate Image'}
