@@ -359,9 +359,23 @@ export default function PortfolioPage() {
           <div className="content-box">
             <h2 className="text-4xl font-bold mb-8 font-heading">Certifications</h2>
             {portfolioData.certifications.map((cert, i) => (
-              <div key={i} className="certification-card pl-6 mb-6 bg-[rgba(15,15,35,0.8)] rounded-lg p-4 border-l-[3px] border-orange-400 cursor-pointer transition-all hover:translate-x-2.5 hover:bg-[rgba(25,25,50,0.95)]">
-                <h3 className="text-xl font-bold text-orange-400 mb-2">{cert.name}</h3>
-                <p className="text-gray-500 text-sm">{cert.issuer}</p>
+              <div key={i} className="certification-card pl-6 mb-6 bg-[rgba(15,15,35,0.8)] rounded-lg p-4 border-l-[3px] border-orange-400 cursor-default transition-all hover:translate-x-2.5 hover:bg-[rgba(25,25,50,0.95)]">
+                <div className="flex justify-between items-center">
+                  <div>
+                    <h3 className="text-xl font-bold text-orange-400 mb-1">{cert.name}</h3>
+                    <p className="text-gray-500 text-sm">{cert.issuer}</p>
+                  </div>
+                  {cert.credentialUrl && (
+                    <a 
+                      href={cert.credentialUrl} 
+                      target="_blank" 
+                      rel="noopener noreferrer" 
+                      className="text-xs bg-orange-500/10 text-orange-400 px-3 py-1.5 rounded-full border border-orange-400/30 hover:bg-orange-500 hover:text-white transition-all font-semibold"
+                    >
+                      View Certificate
+                    </a>
+                  )}
+                </div>
               </div>
             ))}
           </div>

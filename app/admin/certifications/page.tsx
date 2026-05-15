@@ -1,13 +1,14 @@
 'use client';
 import { useState, useEffect } from 'react';
 import toast from 'react-hot-toast';
-import { getCertifications, updateCertification, softDeleteCertification, addCertification } from '@/lib/firestore/portfolio';
+import { getCertifications, updateCertification, softDeleteCertification, addCertification, uploadToStorage } from '@/lib/firestore/portfolio';
 import type { Certification } from '@/types/portfolio';
 
 export default function CertificationsPage() {
   const [certs, setCerts] = useState<Certification[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentCert, setCurrentCert] = useState<Partial<Certification>>({});
+  const [uploading, setUploading] = useState(false);
 
   useEffect(() => {
     getCertifications().then(setCerts);
@@ -26,6 +27,20 @@ export default function CertificationsPage() {
       isVisible: true,
     });
     setIsModalOpen(true);
+  };
+
+  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!e.target.files?.[0]) return;
+    setUploading(true);
+    try {
+      const url = await uploadToStorage(e.target.files[0], 'certifications');
+      setCurrentCert({ ...currentCert, credentialUrl: url });
+      toast.success('Certificate uploaded!');
+    } catch (err) {
+      toast.error('Upload failed');
+    } finally {
+      setUploading(false);
+    }
   };
 
   const handleSave = async (e: React.FormEvent) => {
@@ -123,6 +138,36 @@ export default function CertificationsPage() {
                     placeholder="e.g. Amazon Web Services"
                     value={currentCert.issuer || ''} 
                     onChange={e => setCurrentCert({...currentCert, issuer: e.target.value})}
+                    className="w-full bg-[#050510] border border-gray-800 rounded-lg px-4 py-2 text-white focus:border-orange-500 outline-none"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-400 mb-1">Upload Certificate (Image/PDF)</label>
+                  <div className="flex items-center gap-4">
+                    <input 
+                      type="file" 
+                      onChange={handleFileUpload}
+                      className="hidden" 
+                      id="cert-file"
+                      accept="image/*,.pdf"
+                    />
+                    <label htmlFor="cert-file" className="bg-gray-800 hover:bg-gray-700 text-white px-4 py-2 rounded-lg cursor-pointer text-sm border border-gray-700">
+                      {uploading ? 'Uploading...' : 'Choose File'}
+                    </label>
+                    {currentCert.credentialUrl && (
+                      <span className="text-green-400 text-xs truncate max-w-[200px]">✓ Uploaded</span>
+                    )}
+                  </div>
+                </div>
+                <div>
+                  <label htmlFor="cert-link" className="block text-sm font-medium text-gray-400 mb-1">Verification Link (optional)</label>
+                  <input 
+                    id="cert-link"
+                    type="text" 
+                    title="Verification Link"
+                    placeholder="https://..."
+                    value={currentCert.credentialUrl || ''} 
+                    onChange={e => setCurrentCert({...currentCert, credentialUrl: e.target.value})}
                     className="w-full bg-[#050510] border border-gray-800 rounded-lg px-4 py-2 text-white focus:border-orange-500 outline-none"
                   />
                 </div>

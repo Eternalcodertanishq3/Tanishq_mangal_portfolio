@@ -1,4 +1,5 @@
-import { db } from '../firebase';
+import { db, storage } from '../firebase';
+import { ref as storageRef, uploadBytes, getDownloadURL } from 'firebase/storage';
 import {
   collection,
   doc,
@@ -17,6 +18,12 @@ import {
   type DocumentData,
   type QuerySnapshot,
 } from 'firebase/firestore';
+
+export async function uploadToStorage(file: File, path: string): Promise<string> {
+  const fileRef = storageRef(storage, `${path}/${Date.now()}_${file.name}`);
+  await uploadBytes(fileRef, file);
+  return getDownloadURL(fileRef);
+}
 import type {
   PortfolioConfig,
   SkillCategory,
