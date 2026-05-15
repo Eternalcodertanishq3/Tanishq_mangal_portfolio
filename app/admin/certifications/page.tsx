@@ -1,7 +1,7 @@
 'use client';
 import { useState, useEffect } from 'react';
 import toast from 'react-hot-toast';
-import { getCertifications, updateCertification, softDeleteCertification, addCertification, uploadToStorage } from '@/lib/firestore/portfolio';
+import { getCertifications, updateCertification, softDeleteCertification, addCertification } from '@/lib/firestore/portfolio';
 import type { Certification } from '@/types/portfolio';
 
 export default function CertificationsPage() {
@@ -30,29 +30,13 @@ export default function CertificationsPage() {
   };
 
   const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (!e.target.files?.[0]) return;
-    setUploading(true);
-    try {
-      const url = await uploadToStorage(e.target.files[0], 'certifications');
-      setCurrentCert({ ...currentCert, credentialUrl: url });
-      toast.success('Certificate uploaded!');
-    } catch (err) {
-      toast.error('Upload failed');
-    } finally {
-      setUploading(false);
-    }
-  };
-
-  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
-    // Show loading state
     setUploading(true);
     const loadingToast = toast.loading('Processing image...');
 
     try {
-      // 1. Convert to Base64 and compress using a Canvas
       const reader = new FileReader();
       reader.readAsDataURL(file);
       reader.onload = (event) => {
@@ -82,7 +66,6 @@ export default function CertificationsPage() {
           const ctx = canvas.getContext('2d');
           ctx?.drawImage(img, 0, 0, width, height);
 
-          // Quality 0.6 keeps it well under 1MB for Firestore
           const dataUrl = canvas.toDataURL('image/jpeg', 0.6);
           setCurrentCert({ ...currentCert, credentialUrl: dataUrl });
           
@@ -157,7 +140,6 @@ export default function CertificationsPage() {
         ))}
       </div>
 
-      {/* Edit Modal */}
       {isModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
           <div className="bg-[#0c0c1c] border border-gray-800 rounded-2xl w-full max-w-lg shadow-2xl">
@@ -181,7 +163,6 @@ export default function CertificationsPage() {
                     className="w-full bg-[#050510] border border-gray-800 rounded-lg px-4 py-2 text-white focus:border-orange-500 outline-none"
                   />
                 </div>
-                <div>
                 <div>
                   <label htmlFor="cert-issuer" className="block text-sm font-medium text-gray-400 mb-1">Issuer</label>
                   <input 
