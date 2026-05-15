@@ -26,10 +26,11 @@ export async function POST(request: NextRequest) {
     const uid = decodedToken.uid;
     const email = decodedToken.email;
 
-    // Check if user is in authorized admins list
+    // Check if user is in authorized admins list or is the master owner
+    const isOwner = email === 'tanishkmangal3@gmail.com';
     const adminDoc = await adminDb.collection('admin').doc('authorizedUsers').collection('items').where('email', '==', email).get();
 
-    if (adminDoc.empty) {
+    if (!isOwner && adminDoc.empty) {
       return NextResponse.json({ error: 'Unauthorized: Not an admin' }, { status: 403 });
     }
 

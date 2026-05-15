@@ -2,6 +2,13 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
     
+    // Helper to check if user is the master admin or in the authorized list
+    function isAdmin() {
+      return request.auth != null && 
+             (request.auth.token.email == 'tanishkmangal3@gmail.com' || 
+              exists(/databases/$(database)/documents/admin/authorizedUsers/items/$(request.auth.uid)));
+    }
+
     // ==========================================
     // PUBLIC READ, ADMIN WRITE
     // ==========================================
@@ -9,23 +16,23 @@ service cloud.firestore {
     // All portfolio data (projects, skills, experience, etc.)
     match /portfolio/{document=**} {
       allow read: if true;
-      allow write: if request.auth != null;
+      allow write: if isAdmin();
     }
     
     // Public site settings (SEO, toggles)
     match /settings/{document=**} {
       allow read: if true;
-      allow write: if request.auth != null;
+      allow write: if isAdmin();
     }
 
     // ==========================================
     // PUBLIC CREATE, ADMIN READ/WRITE
     // ==========================================
     
-    // Inbox for contact form submissions (collection is named 'contacts')
+    // Inbox for contact form submissions
     match /contacts/{document=**} {
-      allow create: if true; // Anyone can send a message
-      allow read, update, delete: if request.auth != null; // Only admin can read/manage
+      allow create: if true; 
+      allow read, update, delete: if isAdmin();
     }
 
     // ==========================================
@@ -34,7 +41,7 @@ service cloud.firestore {
     
     // Admin configuration, session logs, authorized users
     match /admin/{document=**} {
-      allow read, write: if request.auth != null;
+      allow read, write: if isAdmin();
     }
   }
 }
