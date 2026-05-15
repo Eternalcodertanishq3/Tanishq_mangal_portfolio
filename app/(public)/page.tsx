@@ -27,8 +27,9 @@ const socialIcons: Record<string, string> = {
 };
 
 export default function PortfolioPage() {
-  const [activeModal, setActiveModal] = useState<string | null>(null);
+  const [activeModal, setActiveModal] = useState<'project' | 'experience' | 'contact' | 'certificate' | null>(null);
   const [modalData, setModalData] = useState<Record<string, unknown> | null>(null);
+  const [certData, setCertData] = useState<Certification | null>(null);
   const [contactForm, setContactForm] = useState({ name: '', email: '', message: '' });
   const [contactSuccess, setContactSuccess] = useState(false);
   const heroRef = useRef<HTMLHeadingElement>(null);
@@ -366,14 +367,15 @@ export default function PortfolioPage() {
                     <p className="text-gray-500 text-sm">{cert.issuer}</p>
                   </div>
                   {cert.credentialUrl && (
-                    <a 
-                      href={cert.credentialUrl} 
-                      target="_blank" 
-                      rel="noopener noreferrer" 
+                    <button 
+                      onClick={() => {
+                        setCertData(cert);
+                        setActiveModal('certificate');
+                      }}
                       className="text-xs bg-orange-500/10 text-orange-400 px-3 py-1.5 rounded-full border border-orange-400/30 hover:bg-orange-500 hover:text-white transition-all font-semibold"
                     >
                       View Certificate
-                    </a>
+                    </button>
                   )}
                 </div>
               </div>
@@ -478,6 +480,29 @@ export default function PortfolioPage() {
                 <svg className="w-16 h-16 text-green-500 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                 <h2 className="text-4xl font-bold mb-4 font-heading">Thank You!</h2>
                 <p className="text-lg text-gray-300">Your message has been sent.</p>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* Certificate Modal */}
+      {activeModal === 'certificate' && certData && (
+        <div className="modal-backdrop active" onClick={(e) => e.target === e.currentTarget && setActiveModal(null)}>
+          <div className="modal-content max-w-[900px] max-h-[90vh] overflow-hidden flex flex-col">
+            <button onClick={() => setActiveModal(null)} className="modal-close-btn">&times;</button>
+            <h2 className="text-3xl font-bold mb-4 font-heading text-orange-400">{certData.name}</h2>
+            <div className="flex-1 overflow-auto bg-black/40 rounded-xl p-2 min-h-[500px] flex items-center justify-center">
+              {certData.credentialUrl?.startsWith('data:application/pdf') ? (
+                <iframe src={certData.credentialUrl} title={certData.name} className="w-full h-full border-none rounded-lg" style={{ height: '70vh' }} />
+              ) : (
+                /* eslint-disable-next-line @next/next/no-img-element */
+                <img src={certData.credentialUrl} alt={certData.name} className="max-w-full max-h-full object-contain rounded-lg shadow-2xl" />
+              )}
+            </div>
+            {certData.credentialUrl?.startsWith('http') && (
+              <div className="mt-4 text-center">
+                <a href={certData.credentialUrl} target="_blank" rel="noopener noreferrer" className="text-orange-400 hover:underline text-sm">Open original in new tab ↗</a>
               </div>
             )}
           </div>
