@@ -142,29 +142,12 @@ export default function CertificationsPage() {
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-400 mb-1">Upload Certificate (Image/PDF)</label>
-                  <div className="flex items-center gap-4">
-                    <input 
-                      type="file" 
-                      onChange={handleFileUpload}
-                      className="hidden" 
-                      id="cert-file"
-                      accept="image/*,.pdf"
-                    />
-                    <label htmlFor="cert-file" className="bg-gray-800 hover:bg-gray-700 text-white px-4 py-2 rounded-lg cursor-pointer text-sm border border-gray-700">
-                      {uploading ? 'Uploading...' : 'Choose File'}
-                    </label>
-                    {currentCert.credentialUrl && (
-                      <span className="text-green-400 text-xs truncate max-w-[200px]">✓ Uploaded</span>
-                    )}
-                  </div>
-                </div>
-                <div>
-                  <label htmlFor="cert-link" className="block text-sm font-medium text-gray-400 mb-1">Verification Link (optional)</label>
+                  <label htmlFor="cert-link" className="block text-sm font-medium text-gray-400 mb-1">Certificate Link (URL)</label>
+                  <p className="text-[10px] text-gray-500 mb-2">Upload your certificate to Google Drive, LinkedIn, or Imgur and paste the link here.</p>
                   <input 
                     id="cert-link"
                     type="text" 
-                    title="Verification Link"
+                    title="Certificate Link"
                     placeholder="https://..."
                     value={currentCert.credentialUrl || ''} 
                     onChange={e => setCurrentCert({...currentCert, credentialUrl: e.target.value})}
